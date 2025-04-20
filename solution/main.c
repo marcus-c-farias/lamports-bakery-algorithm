@@ -4,7 +4,7 @@
 int main(){
 
     lamport_mutex_init();
-    printf("TESTE");
+    printf("\nTESTE\n\n");
 
 
     return 0;

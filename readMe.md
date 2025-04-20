@@ -20,12 +20,19 @@ For this tutorial, assume the following file structure:
 
 ## Steps
 
+0.  **Optional**
+
+    If you want to clone and ignore the file structure above.
+    ```bash
+    git clone https://github.com/marcus-c-farias/lamports-bakery-algorithm.git
+    ```
+
 1.  **Navigate to the Directory**
 
     Use the `cd` command to enter the directory containing your source files.
 
     ```bash
-    cd /Solution
+    cd /solution
     ```
 
 2.  **Compile Library Code to Object Code**
@@ -44,7 +51,7 @@ For this tutorial, assume the following file structure:
 
 3.  **Create the Shared Library**
 
-    Create the shared library (`liblamport_mutex.so`) from the object file.
+    Create the shared library (`libLamport_mutex.so`) from the object file.
 
     ```bash
     gcc -shared lamport_mutex.o -o liblamport_mutex.so
@@ -60,14 +67,14 @@ For this tutorial, assume the following file structure:
     Compile the main program (`main.c`) and link it with the created shared library.
 
     ```bash
-    gcc main.c -L. -llamport_mutex -o executavel
+    gcc main.c -L. -llamport_mutex -o program
     ```
 
     * `gcc`:  Invokes the GCC compiler.
     * `main.c`:  The main program's C source file.
     * `-L.`:  Specifies the directory to search for the library ('.' for the current directory).
     * `-llamport_mutex`:  Links with the library (GCC automatically adds the 'lib' prefix and '.so' extension).
-    * `-o executavel`:  Specifies the output executable file name.
+    * `-o program`:  Specifies the output executable file name.
 
 5.  **Execute the Program (with LD_LIBRARY_PATH)**
 
@@ -75,16 +82,16 @@ For this tutorial, assume the following file structure:
 
     ```bash
     export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
-    ./executavel
+    ./program
     ```
 
     * `export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH`:  Sets the `LD_LIBRARY_PATH` variable, adding the current directory ('.') to the library search path.
-    * `./executavel`:  Executes the compiled program.
+    * `./program`:  Executes the compiled program.
 
 6.  **Run the Program**
 
     ```bash
-    ./executavel
+    ./program
     ```
 
 Following these steps will compile your C code into a shared library and correctly link and run your main program.
