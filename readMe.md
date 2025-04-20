@@ -32,7 +32,7 @@ For this tutorial, assume the following file structure:
     Use the `cd` command to enter the directory containing your source files.
 
     ```bash
-    cd /solution
+    cd lamports-bakery-algorithm/solution/
     ```
 
 2.  **Compile Library Code to Object Code**
@@ -82,16 +82,17 @@ For this tutorial, assume the following file structure:
 
     ```bash
     export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
-    ./program
     ```
 
     * `export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH`:  Sets the `LD_LIBRARY_PATH` variable, adding the current directory ('.') to the library search path.
-    * `./program`:  Executes the compiled program.
+
 
 6.  **Run the Program**
 
     ```bash
     ./program
     ```
+    
+    * `./program`:  Executes the compiled program.
 
 Following these steps will compile your C code into a shared library and correctly link and run your main program.
