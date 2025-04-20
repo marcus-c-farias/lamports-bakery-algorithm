@@ -13,7 +13,7 @@ For this tutorial, assume the following file structure:
 
 ```
 /Solution/
-├── main.c           # Main program using the library
+├── main.c             # Main program using the library
 ├── lamport_mutex.c    # Library implementation
 └── lamport_mutex.h    # Library header file
 ```
