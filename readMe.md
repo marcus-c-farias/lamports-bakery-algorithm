@@ -1,0 +1,6 @@
+1. cd /Solution (Navegue até o diretório)
+2. gcc -fPIC -c lamport_mutex.c -o lamport_mutex.o (Compile o código da biblioteca para código objeto (com -fPIC))
+3. gcc -shared lamport_mutex.o -o liblamport_mutex.so (Crie a biblioteca compartilhada (.so))
+4. gcc main.c -L. -llamport_mutex -o executavel (Compile o programa principal e linke com a biblioteca)
+5. export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH (Execute o programa (configure o LD_LIBRARY_PATH):)
+6. ./executavel (rode o programa)
