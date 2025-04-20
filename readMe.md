@@ -11,10 +11,12 @@ This tutorial outlines the steps to create a shared library from C source files 
 
 For this tutorial, assume the following file structure:
 
+```
 /Solution/
 ├── main.c           # Main program using the library
 ├── lamport_mutex.c    # Library implementation
 └── lamport_mutex.h    # Library header file
+```
 
 ## Steps
 
