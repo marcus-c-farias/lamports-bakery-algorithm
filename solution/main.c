@@ -42,8 +42,8 @@ static void * thread_start(void *arg)
     }
     
     //pthread_mutex_unlock(&lock);
-    printf("Thread %d unlocking...\n", tinfo->num);
-    lamport_mutex_unlock((tinfo->num + 1));
+    printf("Thread %d unlocking...\n", tinfo->num + 1);
+    lamport_mutex_unlock((tinfo->num));
 
     return 0x0;
 }
