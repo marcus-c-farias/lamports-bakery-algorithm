@@ -16,11 +16,7 @@
 #define num_threads 3
 
 int shared_var = 0;
-int num_rep = 10;
-
-// MUTEX CODE BEGIN
-pthread_mutex_t lock;
-// MUTEX CODE END
+int num_rep = 3;
 
 struct thread_info {
     pthread_t id;
@@ -30,34 +26,36 @@ struct thread_info {
 static void * thread_start(void *arg)
 {
     struct thread_info *tinfo = arg;
-
-    //printf("thread_start %d\n", tinfo->num);
-    //printf("Hello! I'm thread %d, id %lu!\n", tinfo->num, tinfo->id);
-    //pthread_mutex_lock(&lock);
-    lamport_mutex_lock((tinfo->num));
-    printf("Thread %d locking...\n", (tinfo->num + 1));
+    
+    printf("Hello! I'm thread %d, id %lu!\n", tinfo->num, tinfo->id);
     for (int i = 0; i < num_rep; i++) {
+        
+        // activate lock
+        lamport_mutex_lock(tinfo->num);
+
         shared_var = shared_var + 1;
+        
+        // unactivate lock
+        lamport_mutex_unlock(tinfo->num);
     }
     
-    //pthread_mutex_unlock(&lock);
-    printf("Thread %d unlocking...\n", tinfo->num + 1);
-    lamport_mutex_unlock((tinfo->num));
-
     return 0x0;
 }
 
 int main(int argc, char **argv)
-{  
+{
     printf("-----------------------------\n");
     printf("| EXECUTING LAMPORT PROGRAM |\n");
-    printf("-----------------------------\n\n");
+    printf("-----------------------------\n");
 
     int thread_num, ret;
     struct thread_info tinfo[num_threads];
     pthread_attr_t attr;
     void *res;
     
+    //create lock
+    lamport_mutex_init(num_threads);    
+
     if (argc > 1)
         num_rep = strtol(argv[1], NULL, 10);
     
@@ -65,11 +63,10 @@ int main(int argc, char **argv)
     if (ret != 0)
         handle_error_en(ret, "pthread_attr_init");
     
-    lamport_mutex_init(num_threads);
-    
+    /* Create one thread for each command-line argument */    
     for (thread_num = 0; thread_num < num_threads; thread_num++) {
-        tinfo[thread_num].num = thread_num;
-
+        tinfo[thread_num].num = thread_num + 1;
+        
         ret = pthread_create(&tinfo[thread_num].id, &attr, &thread_start, &tinfo[thread_num]);
         if (ret != 0)
             handle_error_en(ret, "pthread_create");
@@ -78,7 +75,7 @@ int main(int argc, char **argv)
     ret = pthread_attr_destroy(&attr);
     if (ret != 0)
         handle_error_en(ret, "pthread_attr_destroy");
-
+        
     for (thread_num = 0; thread_num < num_threads; thread_num++) {
         ret = pthread_join(tinfo[thread_num].id, &res);
         if (ret != 0)
@@ -88,7 +85,7 @@ int main(int argc, char **argv)
         free(res);
     }
     
-    lamport_mutex_destroy();
+     //destroy lock
 
     printf("Global var: %d\n", shared_var);
     
