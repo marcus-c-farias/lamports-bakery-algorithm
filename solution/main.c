@@ -16,7 +16,7 @@
 #define num_threads 3
 
 int shared_var = 0;
-int num_rep = 300000000;
+int num_rep = 30000000;
 
 // MUTEX CODE BEGIN
 pthread_mutex_t lock;
@@ -34,16 +34,17 @@ static void * thread_start(void *arg)
 
     //printf("thread_start %d\n", tinfo->num);
     //printf("Hello! I'm thread %d, id %lu!\n", tinfo->num, tinfo->id);
-    //pthread_mutex_lock(&lock);
-    lamport_mutex_lock((tinfo->num));
-    printf("Thread %d locking...\n", (tinfo->num + 1));
     for (int i = 0; i < num_rep; i++) {
+        //pthread_mutex_lock(&lock);
+        lamport_mutex_lock((tinfo->num));
+        printf("Thread %d locking...\n", tinfo->num + 1);
+        //usleep(1);
         shared_var = shared_var + 1;
+        lamport_mutex_unlock((tinfo->num));
+        //printf("Thread %d unlocking...\n", tinfo->num + 1);
+        //pthread_mutex_unlock(&lock);
     }
     
-    //pthread_mutex_unlock(&lock);
-    printf("Thread %d unlocking...\n", tinfo->num + 1);
-    lamport_mutex_unlock((tinfo->num));
 
     return 0x0;
 }
@@ -92,3 +93,4 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
+
