@@ -64,35 +64,29 @@ For this tutorial, assume the following file structure:
 
 4.  **Compile the Main Program and Link**
 
-    Compile the main program (`main.c`) and link it with the created shared library.
+    Compile the program (`program.c` or `program_lamport.c`) and link it with the created shared library.
 
     ```bash
-    gcc main.c -L. -llamport_mutex -o program
+    gcc program.c -L. -llamport_mutex -o program
+    gcc program_lamport.c -L. -llamport_mutex -o program_lamport
     ```
 
     * `gcc`:  Invokes the GCC compiler.
-    * `main.c`:  The main program's C source file.
+    * `program.c` or `program_lamport.c`:  The main program's C source file.
     * `-L.`:  Specifies the directory to search for the library ('.' for the current directory).
     * `-llamport_mutex`:  Links with the library (GCC automatically adds the 'lib' prefix and '.so' extension).
-    * `-o program`:  Specifies the output executable file name.
+    * `-o program` or `-o program_lamport`:  Specifies the output executable file name.
 
 5.  **Execute the Program (with LD_LIBRARY_PATH)**
 
     Before running the executable, set the `LD_LIBRARY_PATH` environment variable to help the system locate the shared library at runtime.
 
     ```bash
-    export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+    time LD_LIBRARY_PATH=. ./program
+    time LD_LIBRARY_PATH=. ./program_lamport
     ```
 
-    * `export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH`:  Sets the `LD_LIBRARY_PATH` variable, adding the current directory ('.') to the library search path.
-
-
-6.  **Run the Program**
-
-    ```bash
-    ./program
-    ```
-    
-    * `./program`:  Executes the compiled program.
+    * `time` is optional if you want to see the benchmark
+    * `LD_LIBRARY_PATH=.`:  Sets the `LD_LIBRARY_PATH` variable, adding the current directory ('.') to the library search path.
 
 Following these steps will compile your C code into a shared library and correctly link and run your main program.

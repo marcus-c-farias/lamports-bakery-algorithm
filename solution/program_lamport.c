@@ -16,7 +16,7 @@
 #define num_threads 3
 
 int shared_var = 0;
-int num_rep = 300000000;
+int num_rep = 10;
 
 // MUTEX CODE BEGIN
 pthread_mutex_t lock;
@@ -31,7 +31,6 @@ static void * thread_start(void *arg)
 {
     struct thread_info *tinfo = arg;
 
-
     //printf("thread_start %d\n", tinfo->num);
     //printf("Hello! I'm thread %d, id %lu!\n", tinfo->num, tinfo->id);
     //pthread_mutex_lock(&lock);
@@ -42,14 +41,18 @@ static void * thread_start(void *arg)
     }
     
     //pthread_mutex_unlock(&lock);
-    printf("Thread %d unlocking...\n", tinfo->num);
-    lamport_mutex_unlock((tinfo->num + 1));
+    printf("Thread %d unlocking...\n", tinfo->num + 1);
+    lamport_mutex_unlock((tinfo->num));
 
     return 0x0;
 }
 
 int main(int argc, char **argv)
-{
+{  
+    printf("-----------------------------\n");
+    printf("| EXECUTING LAMPORT PROGRAM |\n");
+    printf("-----------------------------\n\n");
+
     int thread_num, ret;
     struct thread_info tinfo[num_threads];
     pthread_attr_t attr;
@@ -65,8 +68,8 @@ int main(int argc, char **argv)
     lamport_mutex_init(num_threads);
     
     for (thread_num = 0; thread_num < num_threads; thread_num++) {
-        tinfo[thread_num].num = thread_num; //+ 1
-        
+        tinfo[thread_num].num = thread_num;
+
         ret = pthread_create(&tinfo[thread_num].id, &attr, &thread_start, &tinfo[thread_num]);
         if (ret != 0)
             handle_error_en(ret, "pthread_create");
@@ -76,8 +79,6 @@ int main(int argc, char **argv)
     if (ret != 0)
         handle_error_en(ret, "pthread_attr_destroy");
 
-    
-        
     for (thread_num = 0; thread_num < num_threads; thread_num++) {
         ret = pthread_join(tinfo[thread_num].id, &res);
         if (ret != 0)
@@ -86,9 +87,10 @@ int main(int argc, char **argv)
         printf("Joined with thread %d, id %lu\n", tinfo[thread_num].num, tinfo[thread_num].id);
         free(res);
     }
-    printf("Global var: %d\n", shared_var);
     
     lamport_mutex_destroy();
 
+    printf("Global var: %d\n", shared_var);
+    
     exit(EXIT_SUCCESS);
 }

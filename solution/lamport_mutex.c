@@ -1,63 +1,30 @@
-#include <pthread.h>
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <ctype.h>
 #include "lamport_mutex.h"
-
 
 static int *choosing;
 static int *ticket;
 static int num_threads = 0;
 
-
-void lamport_mutex_init(int n_threads) { //inicializa o mutex (deve ser chamada antes de qualquer lock/unlock)
+void lamport_mutex_init(int n_threads) {
   int i;
   num_threads = n_threads;
   
-  choosing = malloc(n_threads * sizeof(int));
-  ticket = malloc(n_threads * sizeof(int));
-  printf("Mutex: allocated choosing[] and ticket[] for %d threads\n", n_threads);
-
-  
+  choosing = malloc(num_threads * sizeof(int));
+  ticket = malloc(num_threads * sizeof(int));
 
   if (!choosing || !ticket) {
-    fprintf(stderr, "Erro ao alocar memória para o mutex\n");
+    fprintf(stderr, "Allocating error memory for the mutex.\n");
     exit(EXIT_FAILURE);
   }
-
   
   for(i=0; i<num_threads; i++) {
     choosing[i] = 0;
     ticket[i] = 0;
   }
-  /*
-  printf("choosing[301] = %d\n", choosing[301]);
-  printf("choosing[300] = %d\n", choosing[300]);
-  printf("choosing[400] = %d\n", choosing[400]);
-  printf("choosing[350] = %d\n", choosing[350]);
-  printf("choosing[299] = %d\n", choosing[299]);
-  printf("choosing[1000] = %d\n", choosing[1000]);
-  
-  */
-
 }
 
-/*
 int max_ticket() {
-  int max = 0;
-  for (int i = 0; i < num_threads; i++) {
-      if (ticket[i] > max)
-          max = ticket[i];
-  }
-  return max;
-}
-
-*/
-
-int max_ticket() { //retorna o maior número de ticket entre todas as threads.
   int i, max = ticket[0];
   //printf("Debug max1");
 
