@@ -13,10 +13,10 @@
 #define handle_error(msg) \
   do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
-#define num_threads 3
+#define num_threads 100
 
 int shared_var = 0;
-int num_rep = 30000000;
+int num_rep = 300000;
 
 // MUTEX CODE BEGIN
 pthread_mutex_t lock;
@@ -93,4 +93,3 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
-
