@@ -16,7 +16,7 @@
 #define num_threads 3
 
 int shared_var = 0;
-int num_rep = 3;
+int num_rep = 3000000;
 
 struct thread_info {
     pthread_t id;
@@ -30,12 +30,12 @@ static void * thread_start(void *arg)
     printf("Hello! I'm thread %d, id %lu!\n", tinfo->num, tinfo->id);
     for (int i = 0; i < num_rep; i++) {
         
-        // activate lock
+        //printf("Locking... Thread: %d.\n", tinfo->num);
         lamport_mutex_lock(tinfo->num);
 
         shared_var = shared_var + 1;
         
-        // unactivate lock
+        //printf("Unlocking... Thread: %d.\n", tinfo->num);
         lamport_mutex_unlock(tinfo->num);
     }
     
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 {
     printf("-----------------------------\n");
     printf("| EXECUTING LAMPORT PROGRAM |\n");
-    printf("-----------------------------\n");
+    printf("-----------------------------\n\n");
 
     int thread_num, ret;
     struct thread_info tinfo[num_threads];
@@ -62,10 +62,9 @@ int main(int argc, char **argv)
     ret = pthread_attr_init(&attr);
     if (ret != 0)
         handle_error_en(ret, "pthread_attr_init");
-    
-    /* Create one thread for each command-line argument */    
+     
     for (thread_num = 0; thread_num < num_threads; thread_num++) {
-        tinfo[thread_num].num = thread_num + 1;
+        tinfo[thread_num].num = thread_num;
         
         ret = pthread_create(&tinfo[thread_num].id, &attr, &thread_start, &tinfo[thread_num]);
         if (ret != 0)
@@ -86,6 +85,7 @@ int main(int argc, char **argv)
     }
     
      //destroy lock
+    lamport_mutex_destroy();
 
     printf("Global var: %d\n", shared_var);
     

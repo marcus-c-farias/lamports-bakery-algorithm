@@ -1,4 +1,4 @@
-all: liblamport_mutex.so program program_lamport #run_programs clean
+all: liblamport_mutex.so program program_lamport run_programs clean
 
 liblamport_mutex.so: lamport_mutex.o
 	gcc -shared lamport_mutex.o -o liblamport_mutex.so
