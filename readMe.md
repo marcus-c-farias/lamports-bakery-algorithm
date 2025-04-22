@@ -20,9 +20,8 @@ For this tutorial, assume the following file structure:
 
 ## Steps
 
-0.  **Optional**
+0.  **Clone the project**
 
-    If you want to clone and ignore the file structure above.
     ```bash
     git clone https://github.com/marcus-c-farias/lamports-bakery-algorithm.git
     ```
@@ -35,58 +34,10 @@ For this tutorial, assume the following file structure:
     cd lamports-bakery-algorithm/solution/
     ```
 
-2.  **Compile Library Code to Object Code**
+2.  **Run makefile**
 
-    Compile the library's C source file (`lamport_mutex.c`) into an object file (`lamport_mutex.o`). The `-fPIC` flag is crucial for shared libraries as it generates Position Independent Code.
-
-    ```bash
-    gcc -fPIC -c lamport_mutex.c -o lamport_mutex.o
-    ```
-
-    * `gcc`:  Invokes the GCC compiler.
-    * `-fPIC`:  Enables Position Independent Code.
-    * `-c`:  Performs compilation only (no linking).
-    * `lamport_mutex.c`:  The C source file.
-    * `-o lamport_mutex.o`:  The output object file.
-
-3.  **Create the Shared Library**
-
-    Create the shared library (`libLamport_mutex.so`) from the object file.
+    The makefile is already config to compile your C code into a shared library and correctly link and run your main program, after that it cleans. If you want to run step by step, run individual commands from makefile.
 
     ```bash
-    gcc -shared lamport_mutex.o -o liblamport_mutex.so
+    make
     ```
-
-    * `gcc`:  Invokes the GCC compiler.
-    * `-shared`:  Creates a shared library.
-    * `lamport_mutex.o`:  The object file.
-    * `-o liblamport_mutex.so`:  The output shared library file.
-
-4.  **Compile the Main Program and Link**
-
-    Compile the program (`program.c` or `program_lamport.c`) and link it with the created shared library.
-
-    ```bash
-    gcc program.c -L. -llamport_mutex -o program
-    gcc program_lamport.c -L. -llamport_mutex -o program_lamport
-    ```
-
-    * `gcc`:  Invokes the GCC compiler.
-    * `program.c` or `program_lamport.c`:  The main program's C source file.
-    * `-L.`:  Specifies the directory to search for the library ('.' for the current directory).
-    * `-llamport_mutex`:  Links with the library (GCC automatically adds the 'lib' prefix and '.so' extension).
-    * `-o program` or `-o program_lamport`:  Specifies the output executable file name.
-
-5.  **Execute the Program (with LD_LIBRARY_PATH)**
-
-    Before running the executable, set the `LD_LIBRARY_PATH` environment variable to help the system locate the shared library at runtime.
-
-    ```bash
-    time LD_LIBRARY_PATH=. ./program
-    time LD_LIBRARY_PATH=. ./program_lamport
-    ```
-
-    * `time` is optional if you want to see the benchmark
-    * `LD_LIBRARY_PATH=.`:  Sets the `LD_LIBRARY_PATH` variable, adding the current directory ('.') to the library search path.
-
-Following these steps will compile your C code into a shared library and correctly link and run your main program.
