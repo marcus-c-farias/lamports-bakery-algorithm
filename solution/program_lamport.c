@@ -13,7 +13,7 @@
 #define handle_error(msg) \
   do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
-#define num_threads 100
+#define num_threads 3
 
 int shared_var = 0;
 int num_rep = 3000000;
