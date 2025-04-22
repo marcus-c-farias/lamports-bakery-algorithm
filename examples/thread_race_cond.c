@@ -17,10 +17,6 @@
 int shared_var = 0;
 int num_rep = 30;
 
-// MUTEX CODE BEGIN
-pthread_mutex_t lock;
-// MUTEX CODE END
-
 struct thread_info {
     pthread_t id;
     int num;
@@ -31,13 +27,8 @@ static void * thread_start(void *arg)
     struct thread_info *tinfo = arg;
     
     printf("Hello! I'm thread %d, id %lu!\n", tinfo->num, tinfo->id);
-    for (int i = 0; i < num_rep; i++) {
-        // MUTEX CODE BEGIN
-        pthread_mutex_lock(&lock);
+    for (int i = 0; i < num_rep; i++)
         shared_var = shared_var + 1;
-        pthread_mutex_unlock(&lock);
-        // MUTEX CODE END
-    }
     
     return 0x0;
 }
@@ -49,12 +40,6 @@ int main(int argc, char **argv)
     pthread_attr_t attr;
     void *res;
     
-    // MUTEX CODE BEGIN    
-    ret = pthread_mutex_init(&lock, NULL);
-    if (ret != 0)
-        handle_error_en(ret, "pthread_mutex_init");
-    // MUTEX CODE END
-    
     if (argc > 1)
         num_rep = strtol(argv[1], NULL, 10);
     
@@ -62,7 +47,6 @@ int main(int argc, char **argv)
     if (ret != 0)
         handle_error_en(ret, "pthread_attr_init");
     
-    /* Create one thread for each command-line argument */    
     for (thread_num = 0; thread_num < num_threads; thread_num++) {
         tinfo[thread_num].num = thread_num + 1;
         
@@ -81,14 +65,8 @@ int main(int argc, char **argv)
             handle_error_en(ret, "pthread_join");
         
         printf("Joined with thread %d, id %lu\n", tinfo[thread_num].num, tinfo[thread_num].id);
-        free(res); /* Free memory allocated by thread */
+        free(res);
     }
-    
-    // MUTEX CODE BEGIN
-    pthread_mutex_destroy(&lock);
-    // MUTEX CODE END
-
-
     printf("Global var: %d\n", shared_var);
     
     exit(EXIT_SUCCESS);

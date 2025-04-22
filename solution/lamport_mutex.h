@@ -1,23 +1,12 @@
-#ifndef LAMPORT_MUTEX_H
-#define LAMPORT_MUTEX_H
+#ifndef lamport_mutex_h
+#define lamport_mutex_h
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+void lamport_mutex_init(int n_threads);
 
-// Número máximo de threads (pode ser configurável)
-#define MAX_THREADS 1000
+void lamport_mutex_lock(int thread_num);
 
-void lamport_mutex_init(int n_threads); //inicializa o mutex (deve ser chamada antes de qualquer lock/unlock)
-
-void lamport_mutex_lock(int thread_id);
-
-void lamport_mutex_unlock(int thread_id);
+void lamport_mutex_unlock(int thread_num);
 
 void lamport_mutex_destroy();
 
-#ifdef __cplusplus
-}
 #endif
-
-#endif // LAMPORT_MUTEX_H
