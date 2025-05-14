@@ -1,6 +1,6 @@
-# Tutorial: Creating and Using a Shared Library in C (Linux)
+# Tutorial: Running lamports bakery algorithm
 
-This tutorial outlines the steps to create a shared library from C source files and use it in a main program on a Linux system.
+This tutorial outlines the steps to how to run the program.
 
 ## Prerequisites
 
